@@ -109,4 +109,15 @@ $(document).ready(function() {
     newPizzaOrder.createCost();
     $('#currentPizzaCost').text(newPizzaOrder.basePrice);
   });
+  $('span#SubmitOrder').click(function() {
+    var holder = document.getElementById("pizzaSize");
+    var tempSize = holder.options[holder.selectedIndex].value;
+    var inputtedSize = parseInt(tempSize);
+    inputtedName = $('#new-name').val();
+    newPizzaOrder = new PizzaOrder(inputtedName, inputtedSize)
+    newPizzaOrder.addToppingPrice();
+    newPizzaOrder.createCost();
+    $('#result').show();
+    $('#result').text(newPizzaOrder.orderName + " your order will be ready in 2 hours.");
+  });
 });
