@@ -1,0 +1,47 @@
+/*pizza shop bdd
+allow user to choose toppings based off radio buttons. Have cheese already preselected.
+pizza toppings will be an  array of objects in the pizza object.
+have the same principle apply for pizza sizes.
+create an option to order another pizza.
+create an option to allow delivery.
+add to sidebar each pizza order with details.
+ */
+
+#show-pizza {
+  display: none;
+}
+
+.blackground {
+  background-color: black;
+}
+
+.contact {
+  cursor: pointer;
+  color: #0088cc;
+}
+
+.contact:hover {
+  text-decoration: underline;
+}
+
+body {
+  font-family: monospace;
+}
+
+#allleft {
+  height: 800px;
+  float: left;
+}
+
+.widthleft {
+  width: 48%;
+}
+
+.widthright {
+  width: 48%;
+  float: right;
+}
+
+.white {
+  color: white;
+}
