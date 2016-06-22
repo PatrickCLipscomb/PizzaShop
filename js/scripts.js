@@ -16,51 +16,6 @@ var sausagePrice= { name: 'Sausage', price: 3}
 var mushroomPrice = { name: 'Mushroom', price: 2}
 var pineapplePrice = { name: 'Pineapple', price: 2}
 
-PizzaOrder.prototype.addToppingPrice = function() {
-  if (document.getElementById('cheese').checked) {
-    this.toppings.push(cheesePrice);
-  }
-  if (document.getElementById('pepperoni').checked) {
-    this.toppings.push(pepporoniPrice);
-  }
-  if (document.getElementById('sausage').checked) {
-    this.toppings.push(sausagePrice);
-  }
-  if (document.getElementById('mushrooms').checked) {
-    this.toppings.push(mushroomPrice);
-  }
-  if (document.getElementById('pineapple').checked) {
-    this.toppings.push(pineapplePrice);
-  }
-}
-
-PizzaOrder.prototype.sizeConverter = function() {
-debugger;
-  var tempPizzaSize;
-  if (this.pizzaSize === 4) {
-    tempPizzaSize = "Huge";
-  } else if (this.pizzaSize === 3) {
-    tempPizzaSize = "Large";
-  } else if (this.pizzaSize === 2) {
-    tempPizzaSize = "Medium";
-  } else if (this.pizzaSize === 1) {
-    tempPizzaSize = "Small";
-  }
-  return tempPizzaSize;
-}
-
-PizzaOrder.prototype.lastPizzaOrdered = function() {
-  debugger;
-  $('#toppingsPerPizza').append('Pizza size of ' + this.sizeConverter() + ' with these toppings:');
-}
-
-PizzaOrder.prototype.toppingsConverter = function() {
-  var tempToppingsArray = [];
-  this.toppings.forEach(function(topping) {
-    $('#toppingsPerPizza').append('<li>' + topping.name + '</li>')
-  })
-}
-
 PizzaOrder.prototype.createCost = function() {
   var toppingsCost = 0;
   this.toppings.forEach(function(topping) {
@@ -70,15 +25,53 @@ PizzaOrder.prototype.createCost = function() {
   this.basePrice = (this.basePrice * this.pizzaSize / 2)
 }
 
-var radioReset = function() {
-  $('input[name=pizzaCheeseRadio]').attr('checked', false);
-  $('input[name=pizzaPepperoniRadio]').attr('checked', false);
-  $('input[name=pizzaSausageRadio]').attr('checked', false);
-  $('input[name=pizzaMushroomRadio]').attr('checked', false);
-  $('input[name=pizzaPineappleRadio]').attr('checked', false);
-}
-
 $(document).ready(function() {
+  var radioReset = function() {
+    $('input[name=pizzaCheeseRadio]').attr('checked', false);
+    $('input[name=pizzaPepperoniRadio]').attr('checked', false);
+    $('input[name=pizzaSausageRadio]').attr('checked', false);
+    $('input[name=pizzaMushroomRadio]').attr('checked', false);
+    $('input[name=pizzaPineappleRadio]').attr('checked', false);
+  }
+  var sizeConverter = function(pizza) {
+    var tempPizzaSize;
+    if (pizza.pizzaSize === 4) {
+      tempPizzaSize = "Huge";
+    } else if (pizza.pizzaSize === 3) {
+      tempPizzaSize = "Large";
+    } else if (pizza.pizzaSize === 2) {
+      tempPizzaSize = "Medium";
+    } else if (pizza.pizzaSize === 1) {
+      tempPizzaSize = "Small";
+    }
+    return tempPizzaSize;
+  }
+  var addToppingPrice = function(pizza) {
+    if (document.getElementById('cheese').checked) {
+      pizza.toppings.push(cheesePrice);
+    }
+    if (document.getElementById('pepperoni').checked) {
+      pizza.toppings.push(pepporoniPrice);
+    }
+    if (document.getElementById('sausage').checked) {
+      pizza.toppings.push(sausagePrice);
+    }
+    if (document.getElementById('mushrooms').checked) {
+      pizza.toppings.push(mushroomPrice);
+    }
+    if (document.getElementById('pineapple').checked) {
+      pizza.toppings.push(pineapplePrice);
+    }
+  }
+  var toppingsConverter = function(pizza) {
+    var tempToppingsArray = [];
+    pizza.toppings.forEach(function(topping) {
+      $('#toppingsPerPizza').append('<li>' + topping.name + '</li>')
+    })
+  }
+  var lastPizzaOrdered = function() {
+    $('#toppingsPerPizza').append('Pizza size of ' + sizeConverter(newPizzaOrder) + ' with these toppings:');
+  }
   $('form#pizzaOrder').submit(function(event) {
     event.preventDefault();
     var inputtedName = $('#new-name').val();
@@ -86,15 +79,15 @@ $(document).ready(function() {
     var tempSize = holder.options[holder.selectedIndex].value;
     var inputtedSize = parseInt(tempSize);
     newPizzaOrder = new PizzaOrder(inputtedName, inputtedSize)
-    newPizzaOrder.addToppingPrice();
+    addToppingPrice(newPizzaOrder);
     newPizzaOrder.createCost();
     totalOrderPrice += newPizzaOrder.basePrice;
     pizzaCounter += 1
     $('#totalCost').text(totalOrderPrice);
     $('#currentPizzaCost').text(newPizzaOrder.basePrice);
     $('#pizzaNumber').text(pizzaCounter);
-    newPizzaOrder.lastPizzaOrdered();
-    newPizzaOrder.toppingsConverter();
+    lastPizzaOrdered();
+    toppingsConverter(newPizzaOrder);
   });
   $('span#resetRadios').click(function() {
     radioReset();
@@ -105,7 +98,7 @@ $(document).ready(function() {
     var inputtedSize = parseInt(tempSize);
     var inputtedName = '';
     newPizzaOrder = new PizzaOrder(inputtedName, inputtedSize)
-    newPizzaOrder.addToppingPrice();
+    addToppingPrice(newPizzaOrder);
     newPizzaOrder.createCost();
     $('#currentPizzaCost').text(newPizzaOrder.basePrice);
   });
@@ -115,7 +108,7 @@ $(document).ready(function() {
     var inputtedSize = parseInt(tempSize);
     inputtedName = $('#new-name').val();
     newPizzaOrder = new PizzaOrder(inputtedName, inputtedSize)
-    newPizzaOrder.addToppingPrice();
+    addToppingPrice(newPizzaOrder);
     newPizzaOrder.createCost();
     $('#result').show();
     $('#result').text(newPizzaOrder.orderName + " your order will be ready in 2 hours.");
